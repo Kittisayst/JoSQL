@@ -19,7 +19,7 @@ JoSQL sql = new JoSQL(con.getConnectMySQL(), "tb_user");
 # III. ວິທີການໃຊ້ງານຄຳສັ່ງ JoSQL (CRUD)
 * ໂຄງສ້າງຕາຕະລາງຕົວຢ່າງ
 
-| # | Field | Type | length | Null | Index |
+| # | Name | Type | Length/Values | Null | Index |
 | :--: | :-- | :--: | :--: | :--: | :--: |
 | 1 | u_id | int | 10 | :negative_squared_cross_mark: | PK |
 | 2 | u_name | varchar | 255 | :white_check_mark: |  |
