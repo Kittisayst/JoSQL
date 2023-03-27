@@ -32,3 +32,47 @@ JoSQL sql = new JoSQL(con.getConnectMySQL(), "tb_user");
 | 1 | admin | 123 |
 | 2 | user1 | u111 |
 | 3 | user2 | u222 |
+
+## 3.1 ເພີ່ມຂໍ້ມູນ Create / ເພີ່ມຂໍ້ມູນຄົບທຸກ Column
+1. ນຳເຂົ້າຄຳສັ່ງ SQL
+```java
+import java.sql.*;
+```
+2. ໃຊ້ງານ Method `getCreate();`
+```java
+JoSQL sql = new JoSQL(con.getConnectMySQL(), "tb_user");
+  try {
+    PreparedStatement pre = sql.getCreate(); // ສົ່ງຄຳສັ່ງ sql ໃຫ້ກັບ PreparedStatement
+    pre.setInt(1, 4); // ຄ່າຂອງ u_id
+    pre.setString(2, "user3"); // ຄ່າຂອງ u_name
+    pre.setString(3, "u333"); // ຄ່າຂອງ password
+    pre.executeUpdate(); // ປະມວນຜົນຄຳສັ່ງ sql
+   } catch (Exception e) {
+      e.printStackTrace();
+   }
+   ```
+   ອະທິບາຍ: `getCreate();` ຈະສົ່ງຄຳສັ່ງກັບມາດັ່ງລຸ່ມນີ້
+   ```sql
+   INSERT INTO tb_user VALUES(4,'user3','u333')
+   ```
+## 3.2 ເພີ່ມຂໍ້ມູນ Create / ເພີ່ມຂໍ້ມູນສະເພາະ Column ຕາມລຳດັບ
+:warning: ໝາຍເຫດ: ກວດສອບ Column ວ່າລະບຸເປັນ :white_check_mark: Null ຖ້າບໍ່ຕ້ອງການເພີ່ມ
+1. ນຳເຂົ້າຄຳສັ່ງ SQL
+```java
+import java.sql.*;
+```
+2. ໃຊ້ງານ Method `getCreateByColumnIndexs(new int[]{1, 2});`
+* `new int[]{1, 2}` ແມ່ນການລະບຸບລຳດັບ index ຂອງ Column
+* 1 = `u_id` , 2 = `u_name` , 3 = `password` 
+* `password` ເຮົາບໍ່ຕ້ອງການເພີ່ມຄ່າເຮົາກໍ່ຈະບໍ່ໄດ້ລະບົບລົງໃນ Array `new int[]{1, 2}`
+```java
+JoSQL sql = new JoSQL(con.getConnectMySQL(), "tb_user");
+ try {
+  PreparedStatement pre = sql.getCreateByColumnIndexs(new int[]{1, 2});
+  pre.setInt(1, 5);
+  pre.setString(2, "user3");
+  pre.executeUpdate();
+ } catch (Exception e) {
+  e.printStackTrace();
+}
+```
