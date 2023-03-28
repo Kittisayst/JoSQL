@@ -51,7 +51,7 @@ JoSQL sql = new JoSQL(con.getConnectMySQL(), "tb_user");
       e.printStackTrace();
    }
    ```
-   ອະທິບາຍ: `getCreate();` ຈະສົ່ງຄຳສັ່ງກັບມາດັ່ງລຸ່ມນີ້
+   * ອະທິບາຍ: `getCreate();` ຈະສົ່ງຄຳສັ່ງກັບມາດັ່ງລຸ່ມນີ້
    ```sql
    INSERT INTO tb_user VALUES(4,'user3','u333')
    ```
@@ -76,6 +76,10 @@ JoSQL sql = new JoSQL(con.getConnectMySQL(), "tb_user");
   e.printStackTrace();
 }
 ```
+ * ອະທິບາຍ: `getCreateByColumnIndexs(new int[]{1, 2}) ` ຈະສົ່ງຄຳສັ່ງກັບມາດັ່ງລຸ່ມນີ້
+```sql
+INSERT INTO tb_user(u_id,u_name) VALUES (5,'user3')
+```
 ## 3.3 ເພີ່ມຂໍ້ມູນ Create / ເພີ່ມຂໍ້ມູນສະເພາະ Column ຕາມຊື່ຈອງ Column
 :warning: ໝາຍເຫດ: ກວດສອບ Column ວ່າລະບຸເປັນ :white_check_mark: Null ຖ້າບໍ່ຕ້ອງການເພີ່ມ
 1. ນຳເຂົ້າຄຳສັ່ງ SQL
@@ -97,6 +101,10 @@ try {
   e.printStackTrace();
 }
 ```
+ * ອະທິບາຍ: `getCreateByColumnNames(new String[]{"u_id","password"}) ` ຈະສົ່ງຄຳສັ່ງກັບມາດັ່ງລຸ່ມນີ້
+```sql
+INSERT INTO tb_user(u_id,password) VALUES (6,'1234')
+```
 ## 3.4 ອ່ານຂໍ້ມູນ Read ຫຼື Select / ອ່ານຂໍ້ມູນທັງໝົດໃນຕາຕະລາງ
 1. ເຮົາໃຊ້ Method `getSelectAll();`
 ```java
@@ -111,6 +119,10 @@ try {
 } catch (Exception e) {
   e.printStackTrace();
 }
+```
+ * ອະທິບາຍ: `getSelectAll();` ຈະສົ່ງຄຳສັ່ງກັບມາດັ່ງລຸ່ມນີ້
+```sql
+SELECT * FROM tb_user
 ```
 ### Output
 `1 admin 123 | 2 user1 u111 | 3 user2 u222`
@@ -128,4 +140,155 @@ try {
 | Double | getDouble | rs.getDouble1) |
 | Boolean | getBoolean | rs.getBoolean(1) |
 
-
+## 3.5 ອ່ານຂໍ້ມູນ Read ຫຼື Select / ອ່ານຂໍ້ມູນຈາກໄອດີ
+1. ເຮົາໃຊ້ Method `getSelectByID(1);`
+```java
+        JoSQL sql = new JoSQL(con.getConnectMySQL(), "tb_user");
+        try {
+            ResultSet rs = sql.getSelectByID(1);
+            while (rs.next()) {
+                System.out.println(rs.getInt(1));
+                System.out.println(rs.getString(2));
+                System.out.println(rs.getString(3));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+```
+ * ອະທິບາຍ: `getSelectByID(1);` ຈະສົ່ງຄຳສັ່ງກັບມາດັ່ງລຸ່ມນີ້
+```sql
+SELECT * FROM tb_user WHERE u_id = '1'
+```
+### Output
+`1 admin 123`
+* ອະທິບາຍ getSelectByID(1) ເລກ 1 ແມ່ນໄອດີຂອງຂໍ້ມູນ
+## 3.6 ອ່ານຂໍ້ມູນ Read ຫຼື Select / ອ່ານຂໍ້ມູນຕາມ Column Index
+1. ເຮົາໃຊ້ Method `getSelectByColumnIndex(ລຳດັບ Column, Value);`
+```java
+        JoSQL sql = new JoSQL(con.getConnectMySQL(), "tb_user");
+        try {
+            ResultSet rs = sql.getSelectByColumnIndex(2, "admin");
+            while (rs.next()) {
+                System.out.println(rs.getInt(1));
+                System.out.println(rs.getString(2));
+                System.out.println(rs.getString(3));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+ ```
+  * ອະທິບາຍ: `getSelectByColumnIndex(2, "admin");` ຈະສົ່ງຄຳສັ່ງກັບມາດັ່ງລຸ່ມນີ້
+ ```sql
+ SELECT * FROM tb_user WHERE u_name= 'admin'
+ ```
+ ### Output
+`1 admin 123`
+* ອະທິບາຍ getSelectByColumnIndex(2, "admin"); 
+* `2` ລຳດັບຂອງ Column
+* `"admin"` ແມ່ນຂໍ້ມູນທີ່ຕ້ອງການອ່ານ
+## 3.7 ອ່ານຂໍ້ມູນ Read ຫຼື Select / ອ່ານຂໍ້ມູນຕາມເງື່ອນໄຂ
+```java
+        JoSQL sql = new JoSQL(con.getConnectMySQL(), "tb_user");
+        try {
+            ResultSet rs = sql.getSelectByWhere("u_name='admin' AND password='123'");
+            while (rs.next()) {
+                System.out.println(rs.getInt(1));
+                System.out.println(rs.getString(2));
+                System.out.println(rs.getString(3));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+```
+  * ອະທິບາຍ: `getSelectByWhere("u_name='admin' AND password='123'");` ຈະສົ່ງຄຳສັ່ງກັບມາດັ່ງລຸ່ມນີ້
+```sql
+SELECT * FROM tb_user WHERE u_name='admin' AND password='123'
+```
+## 3.7 ແກ້ໄຂຂໍ້ມູນ Update / ແກ້ໄຂຂໍ້ມູນຕາມໄອດີ
+```java
+        try {
+            PreparedStatement pre = sql.getUpdate(1);
+            pre.setString(1, "userEdit");
+            pre.setString(2, "pass123");
+            pre.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+```
+  * ອະທິບາຍ: `sql.getUpdate(1);` ຈະສົ່ງຄຳສັ່ງກັບມາດັ່ງລຸ່ມນີ້
+  * `1` ແມ່ນຄ່າຂອງໄອດີທີ່ອ້າງອີງການອັບເດດ
+```sql
+UPDATE tb_user SET u_name='userEdit',password='pass123' WHERE u_id='1'
+```
+## 3.8 ແກ້ໄຂຂໍ້ມູນ Update / ແກ້ໄຂຂໍ້ມູນຕາມລຳດັບ Column
+```java
+        JoSQL sql = new JoSQL(con.getConnectMySQL(), "tb_user");
+        try {
+            PreparedStatement pre = sql.getUpdateByColumnIndex(2, "userEdit");
+            pre.setString(1, "5555");
+            pre.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+```
+  * ອະທິບາຍ: `getUpdateByColumnIndex(2, "userEdit");` ຈະສົ່ງຄຳສັ່ງກັບມາດັ່ງລຸ່ມນີ້
+  ``sql
+  UPDATE tb_user SET password='5555' WHERE u_name='userEdit'
+  ``
+  ## 3.9 ແກ້ໄຂຂໍ້ມູນ Update / ແກ້ໄຂຂໍ້ມູນຕາມລຳດັບ Column ແບບ Array
+  ```java
+          JoSQL sql = new JoSQL(con.getConnectMySQL(), "tb_user");
+        try {
+            PreparedStatement pre = sql.getUpdateByColumnIndexs(new int[]{2,3}, 2);
+            pre.setString(1, "user222");
+            pre.setString(2, "321");
+            pre.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+```
+  * ອະທິບາຍ: `getUpdateByColumnIndexs(new int[]{2,3}, 2);` ຈະສົ່ງຄຳສັ່ງກັບມາດັ່ງລຸ່ມນີ້
+  ```sql
+  UPDATE tb_user SET u_name='user222',password='321' WHERE u_id='2'
+  ```
+## 3.10 ລົບຂໍ້ມູນ Delete / ລົບຂໍ້ມູນຕາມໄອດີ
+```java
+        JoSQL sql = new JoSQL(con.getConnectMySQL(), "tb_user");
+        try {
+            PreparedStatement pre = sql.getDelete(2);
+            pre.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ```
+  * ອະທິບາຍ: `getDelete(2);` ຈະສົ່ງຄຳສັ່ງກັບມາດັ່ງລຸ່ມນີ້
+```sql
+DELETE FROM tb_user WHERE u_id ='2'
+```
+## 3.11 ລົບຂໍ້ມູນ Delete / ລົບຂໍ້ມູນລຳດັບ Column
+    ```java
+        JoSQL sql = new JoSQL(con.getConnectMySQL(), "tb_user");
+        try {
+            PreparedStatement pre = sql.getDeleteByColumnIndex(2, "user3");
+            pre.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ```
+ * ອະທິບາຍ: `getDeleteByColumnIndex(2, "user3");` ຈະສົ່ງຄຳສັ່ງກັບມາດັ່ງລຸ່ມນີ້
+ ```sql
+ DELETE FROM tb_user WHERE u_name ='user3'
+ ```
+## 3.12 ລົບຂໍ້ມູນ Delete / ລົບຂໍ້ມູນຕາມຊື່ Column
+```java
+        JoSQL sql = new JoSQL(con.getConnectMySQL(), "tb_user");
+        try {
+            PreparedStatement pre = sql.getDeleteByColumnName("password", "1234");
+            pre.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+```
+   * ອະທິບາຍ: `getDeleteByColumnName("password", "1234");` ຈະສົ່ງຄຳສັ່ງກັບມາດັ່ງລຸ່ມນີ້   
+   ```sql
+   DELETE FROM tb_user WHERE password ='1234'
+   ```
