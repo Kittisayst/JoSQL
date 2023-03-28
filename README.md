@@ -260,13 +260,13 @@ UPDATE tb_user SET u_name='userEdit',password='pass123' WHERE u_id='1'
         } catch (Exception e) {
             e.printStackTrace();
         }
-        ```
-  * ອະທິບາຍ: `getDelete(2);` ຈະສົ່ງຄຳສັ່ງກັບມາດັ່ງລຸ່ມນີ້
+```
+* ອະທິບາຍ: `getDelete(2);` ຈະສົ່ງຄຳສັ່ງກັບມາດັ່ງລຸ່ມນີ້
 ```sql
 DELETE FROM tb_user WHERE u_id ='2'
 ```
 ## 3.11 ລົບຂໍ້ມູນ Delete / ລົບຂໍ້ມູນລຳດັບ Column
-    ```java
+```java
         JoSQL sql = new JoSQL(con.getConnectMySQL(), "tb_user");
         try {
             PreparedStatement pre = sql.getDeleteByColumnIndex(2, "user3");
@@ -274,7 +274,7 @@ DELETE FROM tb_user WHERE u_id ='2'
         } catch (Exception e) {
             e.printStackTrace();
         }
-        ```
+```
  * ອະທິບາຍ: `getDeleteByColumnIndex(2, "user3");` ຈະສົ່ງຄຳສັ່ງກັບມາດັ່ງລຸ່ມນີ້
  ```sql
  DELETE FROM tb_user WHERE u_name ='user3'
